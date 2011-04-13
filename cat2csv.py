@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 
 import csv
 from catstruct import catstruct # define la estructura de un .CAT
