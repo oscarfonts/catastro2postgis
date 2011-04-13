@@ -1,13 +1,13 @@
 DROP TABLE IF EXISTS carvia;
 CREATE TABLE carvia
 (
-   "mapa" numeric(6,0), 
-   "ttggss" text, 
-   "via" numeric(10,0), 
-   "denomina" text, 
-   "fechaalta" numeric(8,0), 
-   "fechabaja" numeric(8,0)
-) 
+   "mapa" numeric(6),
+   "ttggss" varchar(6),
+   "via" numeric(10),
+   "denomina" varchar(25),
+   "fechaalta" numeric(8),
+   "fechabaja" numeric(8)
+)
 WITH (
   OIDS = FALSE
 );

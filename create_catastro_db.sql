@@ -1,6 +1,6 @@
 CREATE DATABASE catastro
   WITH ENCODING='UTF8'
-       OWNER=opengeo
+       OWNER=:owner
        TEMPLATE=template_postgis
        CONNECTION LIMIT=-1;
 

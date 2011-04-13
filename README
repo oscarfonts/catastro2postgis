@@ -1,2 +1,40 @@
-El punto de inicio es catastro.sh
+catastro2postgis
+----------------
+Oscar Fonts - 2011.04.13
+
+Pre-requisitos?
+
+gdal/ogr, python, iconv, PostGIS
+
+
+Como usarlo?
+
+El punto de inicio es ./catastro2postgis.sh
+Antes de ejecutarlo, debe editarse catastro2postgis.sh para cambiar $dbuser y $s_srs, y, en su caso (baleares), el $grid.
+catastro2postgis espera encontrar en el path actual dos ficheros bajados de catastro: un .zip con los shapefiles y un .gz con la info alfanumerica (.cat)
+
+
+Que hace?
+
+* Descomprime todo en tmp/
+* Crea data/, donde pone:
+  - Los .shp reproyectados a 4326
+  - El .cat convertido en sendos .csv
+  - 'Carvias.dbf' convertido a .csv
+* Carga los .shp y los .csv en PostGIS
+* Crea una vista 'calles' que hace un join de 'ejes' y 'carvias', para poder pintar las calles con sus nombres
+* Carga en el PostGIS dos diccionarios extra: tipos_via y cod_usos
+
+
+Que falta por hacer?
+
+* Relacionar las tablas alfanumericas con las geograficas y con los diccionarios
+* Que Ivan aplique su ogr2osm ;)
+
+
+Otros usos?
+
+Si solamente se quiere convertir del formato .cat a un formato mas tratable (.csv), usar el script cat2csv.py.
+Hay unos cuantos paths hardcoded, pero es sencillo.
+El meollo es la estructura de datos catstruct.py, donde se describe el formato .cat de manera procesable.
 
