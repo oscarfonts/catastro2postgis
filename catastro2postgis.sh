@@ -60,7 +60,7 @@ do
 done
 
 # Join shapes & attributes
-# TODO
+psql -d $dbname -U $dbuser -f parcela_direccion.sql
 
 # Cleanup
 rm -R tmp
