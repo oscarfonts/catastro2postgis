@@ -1,67 +1,80 @@
 #!/bin/bash
 
 # Params
-s_srs=23031
-grid="./peninsula.gsb"
 dbname=catastro
-dbuser=opengeo
+dbuser=postgres
+s_srs=23031
+grid="./ntv2/peninsula.gsb"
+datadir=LesLlosses/
 
-# Create catastro database
-psql -d postgres -U $dbuser -f create_catastro_db.sql -v owner=$dbuser
 
-# Uncompress downloaded files
-mkdir tmp
-for file in *.zip
-do
-    unzip "$file" -d tmp
-done
-for file in tmp/*.zip
-do
-    unzip "$file" -d tmp
-done
-for file in *.gz
-do
-    gunzip -c "$file" > tmp/attr.cat
-done
+# Crear base de datos
+echo Creando base de datos $dbname con propietario $dbuser
+psql -d postgres -U $dbuser -f sql/create_db.sql -v owner=$dbuser -v database=$dbname
 
-# Reproject shapes to 4326
-ogr2ogr -s_srs "+init=epsg:$s_srs +nadgrids=./peninsula.gsb +wktext" -t_srs EPSG:4326 data tmp
 
-# Load shapes to PostGIS
-for file in data/*.shp
-do
-    table=`basename $file .shp`
-    shp2pgsql -d -s 4326 $file $table | psql -d $dbname -U $dbuser
-done
-
-# Load street names: dbf -> csv -> postgis & make postgis view
-ogr2ogr -F CSV data/tmp data/Carvia.dbf
-mv data/tmp/Carvia.csv data/Carvia.csv
-rm -R data/tmp
-psql -d $dbname -U $dbuser -f create_calles_view.sql
-psql -d $dbname -U $dbuser -c "COPY carvia FROM '${PWD}/data/Carvia.csv' WITH DELIMITER ',' CSV HEADER"
-
-# Convert .cat to .csv and load to PostGIS
-iconv -f ISO-8859-1 -t UTF8 tmp/attr.cat -o data/attr.cat
-./cat2csv.py
-./catstruct2createsql.py | psql -d $dbname -U $dbuser
-for file in data/*.csv
+# Diccionarios
+echo Creando diccionarios
+psql -d $dbname -U $dbuser -f sql/dict.sql
+for file in dict/*.csv
 do
    table=`basename $file .csv`
    psql -d $dbname -U $dbuser -c "COPY ${table} FROM '${PWD}/${file}' WITH DELIMITER ',' CSV HEADER" 
 done
 
-# Load dictionaries to PostGIS (cod_usos and tipos_via)
-psql -d $dbname -U $dbuser -f create_dictionaries.sql
-for file in *.csv
+
+# Shapefiles
+for zipfile in ${datadir}*.zip
 do
-   table=`basename $file .csv`
-   psql -d $dbname -U $dbuser -c "COPY ${table} FROM '${PWD}/${file}' WITH DELIMITER ',' CSV HEADER" 
+    folder=`basename $zipfile .zip`
+    echo Descomprimiendo cartografia ${folder}
+        
+    # Unzip twice to tmp
+    mkdir -p ${datadir}tmp/${folder}
+    unzip -qo "$zipfile" -d ${datadir}tmp/${folder}
+    for layerzip in ${datadir}tmp/${folder}/*.zip
+    do
+        unzip -qo "$layerzip" -d ${datadir}tmp/${folder}
+        rm $layerzip
+    done
+    
+    # Reproject to EPSG:4326
+    echo Reproyectando ${folder}
+    ogr2ogr -overwrite -s_srs "+init=epsg:$s_srs +nadgrids=${grid} +wktext" -t_srs EPSG:4326 ${datadir}${folder} ${datadir}tmp/${folder}
+
+    for shapefile in ${datadir}${folder}/*.dbf
+    do
+        table=`basename $shapefile .dbf`
+        shp2pgsql -p -s 4326 $shapefile $table | psql -d $dbname -U $dbuser > /dev/null
+        shp2pgsql -W ISO-8859-1 -a -s 4326 $shapefile $table | psql -d $dbname -U $dbuser > /dev/null
+    done
 done
 
-# Join shapes & attributes
-psql -d $dbname -U $dbuser -f parcela_direccion.sql
 
-# Cleanup
-rm -R tmp
+# Datos alfanumericos (.cat)
+./catstruct2sql.py | psql -d $dbname -U $dbuser
+for gzfile in ${datadir}*.gz
+do
+    filename=`basename $gzfile .gz`
+    echo Descomprimiendo datos alfanumericos ${filename}
+    gunzip -c "$gzfile" > ${datadir}tmp/${filename}
+    iconv -f ISO-8859-1 -t UTF8 ${datadir}tmp/${filename} -o ${datadir}${filename}
+    dirname=`basename $filename .CAT`
+    mkdir ${datadir}$dirname
+    ./cat2csv.py ${datadir}${filename} ${datadir}${dirname}
+    for csvfile in ${datadir}${dirname}/*.csv
+    do
+       table=`basename $csvfile .csv`
+       psql -d $dbname -U $dbuser -c "COPY ${table} FROM '${PWD}/${csvfile}' WITH DELIMITER ',' CSV HEADER" 
+    done
+done
+
+
+# Vistas
+echo Creando vistas
+psql -d $dbname -U $dbuser -f sql/views.sql
+
+
+# Limpieza
+rm -R ${datadir}/tmp
 

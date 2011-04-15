@@ -52,7 +52,7 @@ catstruct[11] = [
     [253, 3, 'N', 'codigo_poligono'],
     [256, 5, 'N', 'codigo_parcela'],
     [261, 5, 'X', 'codigo_paraje_dgc'],
-    [266, 30, 'N', 'nombre_paraje'],
+    [266, 30, 'X', 'nombre_paraje'],
     [296, 10, 'N', 'superficie_finca_o_parcela_catastral_m2'],
     [306, 7, 'N', 'superficie_construida_total'],
     [313, 7, 'N', 'superficie_construida_sobre_rasante'],

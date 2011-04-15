@@ -1,15 +1,28 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+import sys
+import os
 import csv
+
 from catstruct import catstruct # define la estructura de un .CAT
 
-rf = open('data/attr.cat') # input file
-wf = {}                    # output files
+if (len(sys.argv)<3):
+	print """Convierte un .cat de Catastro a .csv.
+	
+	Uso: cat2csv.py fichero.cat path_destino
+"""
+	sys.exit(2)
+	
+inputfile=sys.argv[1]
+basedir=sys.argv[2]
+
+rf = open(inputfile) # input file
+wf = {}              # output files
 
 # Generamos un CSV por cada tipo de registro
 for tipo in catstruct:
-    filename = 'data/cat_'+str(tipo)+'.csv'
+    filename = basedir+'/cat_'+str(tipo)+'.csv'
     print 'Creando ' + filename;
     wf[tipo] = open(filename, 'w')
     # Escribimos primer registro con nombres de campos

@@ -10,31 +10,35 @@ gdal/ogr, python, iconv, PostGIS
 Como usarlo?
 
 El punto de inicio es ./catastro2postgis.sh
-Antes de ejecutarlo, debe editarse catastro2postgis.sh para cambiar $dbuser y $s_srs, y, en su caso (baleares), el $grid.
-catastro2postgis espera encontrar en el path actual dos ficheros bajados de catastro: un .zip con los shapefiles y un .gz con la info alfanumerica (.cat)
+
+Antes de ejecutarlo, debe editarse catastro2postgis.sh para cambiar:
+
+ $datadir -- directorio donde estan los .zip y .gz bajados de Catastro, que contienen .shp y .cat respectivamente.
+ $dbname -- nombre de la bbdd a crear.
+ $dbuser -- usuario con permisos para crear la nueva bbdd.
+ $s_srs -- Según el huso.
+ $grid -- La rejilla ntv2 de transformación. Cambiar si en Baleares.
 
 
 Que hace?
 
-* Descomprime todo en tmp/
-* Crea data/, donde pone:
-  - Los .shp reproyectados a 4326
-  - El .cat convertido en sendos .csv
-  - 'Carvias.dbf' convertido a .csv
-* Carga los .shp y los .csv en PostGIS
-* Crea una vista 'calles' que hace un join de 'ejes' y 'carvias', para poder pintar las calles con sus nombres
-* Carga en el PostGIS dos diccionarios extra: tipos_via y cod_usos
+* Descomprime shapes, los reproyecta a 4326, los carga en PostGIS. Tambien tablas sin geometrias (solo dbf).
+* Descomprime .cat, recodifica a UTF-8, lo convierte a .csv, y lo carga en PostGIS.
+* Carga una serie de diccionarios con: los tipos de via, los tipos de construccion, los usos de inmuebles.
+* Crea vistas más simples y molonas:
+   - calles con nombres
+   - construcciones con su direccion postal y sus usos 
 
 
 Que falta por hacer?
 
-* Relacionar las tablas alfanumericas con las geograficas y con los diccionarios
-* Que Ivan aplique su ogr2osm ;)
+* Afinar mas las direcciones postales de las parcelas
+* Un diccionario explicando los codigos TTGGSS
+* Crear simbolizaciones SLD
+* Establecer mapeo de elementos catastro vs. tags OSM, y aplicar gdal2osm
 
 
 Otros usos?
 
-Si solamente se quiere convertir del formato .cat a un formato mas tratable (.csv), usar el script cat2csv.py.
-Hay unos cuantos paths hardcoded, pero es sencillo.
-El meollo es la estructura de datos catstruct.py, donde se describe el formato .cat de manera procesable.
+Tambien se puede convertir solamente el formato .cat a .csv con cat2csv.py.
 
