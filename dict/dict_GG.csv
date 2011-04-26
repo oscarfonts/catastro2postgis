@@ -1,0 +1,6 @@
+"min_GG","max_GG","descripcion"
+01,39,"Grupos de información lineal"
+40,69,"Grupos de información superficial (Centroides)"
+70,79,"Perímetros de áreas representada a escala"
+80,89,"Grupos de información puntual"
+90,99,"Grupos de textos, rotulación"
