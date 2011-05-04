@@ -10,22 +10,25 @@ INSERT INTO geometry_columns(f_table_catalog, f_table_schema, f_table_name, f_ge
   SELECT '', '', 'ejes_nombre', 'the_geom', ST_CoordDim(the_geom), ST_SRID(the_geom), GeometryType(the_geom)
   FROM ejes_nombre LIMIT 1;
 
-
 CREATE OR REPLACE VIEW parcela_direccion AS 
-   SELECT DISTINCT parcela.gid, parcela.the_geom, parcela.refcat, (initcap(carvia.denomina) || ', ' || parcela.numero) as direccion
-     FROM parcela, carvia
-     WHERE parcela.via = carvia.via;
+   SELECT DISTINCT parcela.gid, parcela.the_geom, parcela.refcat,
+          CASE WHEN parcela.numero <> 0 THEN (calles.nombre || ', ' || parcela.numero) ELSE calles.nombre END AS direccion
+     FROM parcela
+     LEFT OUTER JOIN calles
+       ON parcela.via = calles.id;
 
 INSERT INTO geometry_columns(f_table_catalog, f_table_schema, f_table_name, f_geometry_column, coord_dimension, srid, "type")
   SELECT '', '', 'parcela_direccion', 'the_geom', ST_CoordDim(the_geom), ST_SRID(the_geom), GeometryType(the_geom)
   FROM parcela_direccion LIMIT 1;
 
--- TODO sacar direcciones mas chulas
+-- TODO sacar direcciones mas chulas, con numeros de policia
 CREATE OR REPLACE VIEW construcciones AS 
-   SELECT DISTINCT constru.gid, constru.the_geom, constru.refcat, constru.constru, dict_constru.desc as construccion, parcela_direccion.direccion
-     FROM constru, dict_constru, parcela_direccion
-     WHERE constru.constru = dict_constru.id
-     AND constru.refcat = parcela_direccion.refcat;
+   SELECT DISTINCT constru.gid, constru.the_geom, constru.constru, dict_constru.desc as tipo, parcela_direccion.direccion
+     FROM constru
+     LEFT OUTER JOIN dict_constru
+       ON constru.constru = dict_constru.id
+     LEFT OUTER JOIN parcela_direccion
+       ON constru.refcat = parcela_direccion.refcat;
 
 INSERT INTO geometry_columns(f_table_catalog, f_table_schema, f_table_name, f_geometry_column, coord_dimension, srid, "type")
   SELECT '', '', 'construcciones', 'the_geom', ST_CoordDim(the_geom), ST_SRID(the_geom), GeometryType(the_geom)
