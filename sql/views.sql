@@ -1,11 +1,14 @@
-CREATE OR REPLACE VIEW calle_nombre AS
-  SELECT DISTINCT ejes.gid, ejes.the_geom, ejes.ttggss, initcap(carvia.denomina) as nombre
-  FROM ejes, carvia
-  WHERE ejes.via = carvia.via;
+CREATE OR REPLACE VIEW ejes_nombre AS
+ SELECT DISTINCT ejes.gid, ejes.the_geom, calles.nombre, dict_ttggss.ttggss, dict_ttggss.descripcion as tipo
+   FROM ejes
+   LEFT OUTER JOIN calles
+     ON ejes.via = calles.id, dict_ttggss
+  WHERE dict_ttggss.ttggss = ejes.ttggss;
+
   
 INSERT INTO geometry_columns(f_table_catalog, f_table_schema, f_table_name, f_geometry_column, coord_dimension, srid, "type")
-  SELECT '', '', 'calle_nombre', 'the_geom', ST_CoordDim(the_geom), ST_SRID(the_geom), GeometryType(the_geom)
-  FROM calle_nombre LIMIT 1;
+  SELECT '', '', 'ejes_nombre', 'the_geom', ST_CoordDim(the_geom), ST_SRID(the_geom), GeometryType(the_geom)
+  FROM ejes_nombre LIMIT 1;
 
 
 CREATE OR REPLACE VIEW parcela_direccion AS 
