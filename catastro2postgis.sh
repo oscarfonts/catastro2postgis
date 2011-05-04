@@ -5,7 +5,7 @@ dbname=catastro
 dbuser=postgres
 s_srs=23031
 grid="./ntv2/peninsula.gsb"
-datadir=LesLlosses/
+datadir=SantaEugeniaDeBerga/
 
 
 # Crear base de datos
