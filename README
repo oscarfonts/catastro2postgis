@@ -1,6 +1,7 @@
 catastro2postgis
 ----------------
-Oscar Fonts - 2011.04.13
+Oscar Fonts - 2011.05.05
+
 
 Pre-requisitos?
 
@@ -24,21 +25,24 @@ Que hace?
 
 * Descomprime shapes, los reproyecta a 4326, los carga en PostGIS. Tambien tablas sin geometrias (solo dbf).
 * Descomprime .cat, recodifica a UTF-8, lo convierte a .csv, y lo carga en PostGIS.
-* Carga una serie de diccionarios con: los tipos de via, los tipos de construccion, los usos de inmuebles.
-* Crea vistas más simples y molonas:
-   - calles con nombres
-   - construcciones con su direccion postal y sus usos 
+* Carga una serie de diccionarios con:
+   - tipos de via (en español y catalán),
+   - los tipos de construccion,
+   - los usos de inmuebles,
+   - las descripciones TTGGSS.
+* Crea vistas más chulas:
+   - ejes_nombre: añade nombres de vía a "ejes".
+   - construcciones: añade direcciones postales a "constru".
+* Bonus Pack: Conjunto de simbolizaciones SLD para: elempun, elemtex, elemlin, limites, construcciones y ejes_nombre.
 
 
 Que falta por hacer?
 
-* Afinar mas las direcciones postales de las parcelas
-* Un diccionario explicando los codigos TTGGSS
-* Crear simbolizaciones SLD
-* Establecer mapeo de elementos catastro vs. tags OSM, y aplicar gdal2osm
+* Establecer mapeo de elementos catastro vs. tags OSM, y aplicar gdal2osm y/o catastreitor
+* Potencialmente, de algunos tipos de explotación de las subparcelas de rústica pueden deducirse usos del suelo
 
 
 Otros usos?
 
-Tambien se puede convertir solamente el formato .cat a .csv con cat2csv.py.
+Tambien se puede convertir solamente el formato .cat a .csv con cat2csv.py
 
