@@ -1,20 +1,15 @@
 --
 -- Ejes con sus nombres
 --
-﻿CREATE OR REPLACE VIEW ejes_nombre AS
- SELECT DISTINCT ejes.gid, ejes.the_geom, calles.nombre, dict_ttggss.ttggss, dict_ttggss.descripcion as tipo
+CREATE OR REPLACE VIEW ejes_nombre AS 
+ SELECT DISTINCT ejes.gid, ejes.the_geom, calles.nombre, dict_ttggss.ttggss, dict_ttggss.descripcion AS tipo
    FROM ejes
-   LEFT OUTER JOIN calles
-     ON ejes.via = calles.id, dict_ttggss
-  WHERE dict_ttggss.ttggss = ejes.ttggss;
+   LEFT JOIN calles ON ejes.via = calles.id, dict_ttggss
+  WHERE dict_ttggss.ttggss = ejes.ttggss::bpchar;
   
 INSERT INTO geometry_columns(f_table_catalog, f_table_schema, f_table_name, f_geometry_column, coord_dimension, srid, "type")
   SELECT '', '', 'ejes_nombre', 'the_geom', ST_CoordDim(the_geom), ST_SRID(the_geom), GeometryType(the_geom)
   FROM ejes_nombre LIMIT 1;
-
-SELECT 
-, *
-FROM constru
 
 ---
 --- Construcciones con sus direcciones y si tienen alturas positivas
