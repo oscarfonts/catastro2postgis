@@ -58,7 +58,7 @@ do
     filename=`basename $gzfile .gz`
     echo Descomprimiendo datos alfanumericos ${filename}
     gunzip -c "$gzfile" > ${datadir}tmp/${filename}
-    iconv -f ISO-8859-1 -t UTF8 ${datadir}tmp/${filename} -o ${datadir}${filename}
+    iconv -f ISO-8859-1 -t UTF-8 ${datadir}tmp/${filename} -o ${datadir}${filename}
     dirname=`basename $filename .CAT`
     mkdir ${datadir}$dirname
     ./cat2csv.py ${datadir}${filename} ${datadir}${dirname}
