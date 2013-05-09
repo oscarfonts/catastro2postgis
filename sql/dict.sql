@@ -35,3 +35,10 @@ CREATE TABLE dict_ttggss
     "descr_tema" varchar(128)
 );
 
+DROP TABLE IF EXISTS dict_destino_locales;
+CREATE TABLE dict_destino_locales
+(
+    "id" varchar(5),
+    "desc" varchar(32)
+);
+
