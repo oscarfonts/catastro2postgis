@@ -191,6 +191,81 @@ catstruct[17] = [
     [127, 3, 'X', 'codigo_modalidad_reparto'] # [TA]C[1234]
 ]
 
+# 46 - Registro de situaciones finales de titularidad
+catstruct[46] = [
+    [24, 2, 'N', 'codigo_delegacion_meh'],
+    [26, 3, 'N', 'codigo_municipio_dgc'],
+    [29, 2, 'X', 'naturaleza_suelo_ocupado'], # 'UR' urbana, 'RU' rustica
+    [31, 14, 'X', 'parcela_catastral'],
+    [45, 4, 'X', 'codigo_subparcela'],
+    [49, 1, 'X', 'primer_carac_control'],
+    [50, 1, 'X', 'segundo_carac_control'],
+    [51, 2, 'X', 'codigo_derecho'],
+    [53, 5, 'N', 'porcentage_derecho'],
+    [58, 3, 'N', 'ordinal_derecho'],
+    [61, 9, 'X', 'nif_titular'],
+    [70, 60, 'X', 'nombre_titular'], # Primer apellido, segundo y nombre o razón social
+    [130, 1, 'X', 'motivo_no_nif'], # 1 Extranjero, 2 menor de edad, 9 otras situaciones
+    [131, 2, 'N', 'codigo_provincia_ine'],
+    [133, 25, 'X', 'nombre_provincia'],
+    [158, 3, 'N', 'codigo_municipio_dgc'],
+    [161, 3, 'N', 'codigo_municipio_ine'],
+    [164, 40, 'X', 'nombre_municipio'],
+    [204, 30, 'X', 'nombre_entidad_menor'],
+    [235, 5, 'N', 'codigo_via_publica_dgc'],
+    [239, 5, 'X', 'tipo_via'],
+    [244, 25, 'X', 'nombre_via'],
+    [269, 4, 'N', 'primer_numero_policia'],
+    [273, 1, 'X', 'primera_letra'],
+    [274, 4, 'N', 'segundo_numero_policia'],
+    [278, 1, 'X', 'segunda_letra'],
+    [279, 5, 'N', 'kilometro_por_cien'],
+    [284, 4, 'X', 'bloque'],
+    [288, 2, 'X', 'escalera'],
+    [290, 3, 'X', 'planta'],
+    [293, 3, 'X', 'puerta'],
+    [296, 25, 'X', 'direccion_no_estructurada'],
+    [321, 5, 'N', 'codigo_postal'],
+    [326, 5, 'N', 'apartado_correos'],
+    [331, 9, 'X', 'nif_conyuge'],
+    [340, 9, 'X', 'nif_cb'],
+    [349, 20, 'X', 'complemento_titularidad']
+]
+
+# 47 - Registro de comunidad de bienes formalmente constituida presente en una situación final
+catstruct[47] = [
+    [24, 2, 'N', 'codigo_delegacion_meh'],
+    [26, 3, 'N', 'codigo_municipio_dgc'],
+    [29, 2, 'X', 'naturaleza_suelo_ocupado'], # 'UR' urbana, 'RU' rustica
+    [31, 14, 'X', 'parcela_catastral'],
+    [45, 4, 'X', 'codigo_subparcela'],
+    [49, 1, 'X', 'primer_carac_control'],
+    [50, 1, 'X', 'segundo_carac_control'],
+    [51, 9, 'X', 'nif_comunidad_bienes'],
+    [60, 60, 'X', 'denominacion_razon_socil'],
+    [120, 2, 'N', 'codigo_provincia_ine'],
+    [122, 25, 'X', 'nombre_provincia'],
+    [147, 3, 'N', 'codigo_municipio_dgc'],
+    [150, 3, 'N', 'codigo_municipio_ine'],
+    [153, 40, 'X', 'nombre_municipio'],
+    [193, 30, 'X', 'nombre_entidad_menor'],
+    [223, 5, 'N', 'codigo_via_publica_dgc'],
+    [228, 5, 'X', 'tipo_via'],
+    [233, 25, 'X', 'nombre_via'],
+    [258, 4, 'N', 'primer_numero_policia'],
+    [262, 1, 'X', 'primera_letra'],
+    [263, 4, 'N', 'segundo_numero_policia'],
+    [267, 1, 'X', 'segunda_letra'],
+    [268, 5, 'N', 'kilometro_por_cien'],
+    [273, 4, 'X', 'bloque'],
+    [277, 2, 'X', 'escalera'],
+    [279, 3, 'X', 'planta'],
+    [282, 3, 'X', 'puerta'],
+    [285, 25, 'X', 'direccion_no_estructurada'],
+    [310, 5, 'N', 'codigo_postal'],
+    [315, 5, 'N', 'apartado_correos']
+]
+
 # 90 - Registro de cola
 catstruct[90] = [
     [10, 7, 'N', 'numero_registros_tipo_11'],
@@ -198,6 +273,8 @@ catstruct[90] = [
     [31, 7, 'N', 'numero_registros_tipo_14'],
     [38, 7, 'N', 'numero_registros_tipo_15'],
     [45, 7, 'N', 'numero_registros_tipo_16'],
-    [52, 7, 'N', 'numero_registros_tipo_17']
+    [52, 7, 'N', 'numero_registros_tipo_17'],
+    [59, 7, 'N', 'numero_registros_tipo_46'],
+    [66, 7, 'N', 'numero_registros_tipo_47']
 ]
 
